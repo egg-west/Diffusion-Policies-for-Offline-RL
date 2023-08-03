@@ -149,7 +149,7 @@ class Diffusion_QL(object):
 
             self.actor_optimizer.zero_grad()
             actor_loss.backward()
-            if self.grad_norm > 0: 
+            if self.grad_norm > 0:
                 actor_grad_norms = nn.utils.clip_grad_norm_(self.actor.parameters(), max_norm=self.grad_norm, norm_type=2)
             self.actor_optimizer.step()
 
@@ -177,8 +177,9 @@ class Diffusion_QL(object):
             metric['bc_loss'].append(bc_loss.item())
             metric['ql_loss'].append(q_loss.item())
             metric['critic_loss'].append(critic_loss.item())
+            metric['q'].append(((q1_new_action + q2_new_action) / 2.0).abs().mean().detach().item())
 
-        if self.lr_decay: 
+        if self.lr_decay:
             self.actor_lr_scheduler.step()
             self.critic_lr_scheduler.step()
 

@@ -110,7 +110,8 @@ def train_agent(env, state_dim, action_dim, max_action, device, output_dir, args
                         "train/bc_loss":np.mean(loss_metric['bc_loss']),
                         "ql_loss":np.mean(loss_metric['ql_loss']),
                         "actor_loss":np.mean(loss_metric['actor_loss']),
-                        "critic_loss":np.mean(loss_metric['critic_loss'])}
+                        "critic_loss":np.mean(loss_metric['critic_loss']),
+                        "q_value":np.mean(loss_metric['q'])}
         wandb.log(results_dict, step=training_iters)
         np.save(os.path.join(output_dir, "eval"), evaluations)
         logger.record_tabular('Average Episodic Reward', eval_res)
