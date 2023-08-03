@@ -177,7 +177,7 @@ def eval_policy(policy, env_name, seed, eval_episodes=10):
     avg_norm_score = eval_env.get_normalized_score(avg_reward)
     std_norm_score = np.std(normalized_scores)
 
-    utils.print_banner(f"Evaluation over {eval_episodes} episodes: {avg_reward:.2f} {avg_norm_score:.2f}")
+    utils.print_banner(f"Evaluation over {eval_episodes} episodes: {avg_reward:.2f} {avg_norm_score:.2f}, normalized return: {avg_norm_score:.2f}")
     return avg_reward, std_reward, avg_norm_score, std_norm_score
 
 
