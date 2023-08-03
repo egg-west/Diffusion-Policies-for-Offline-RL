@@ -45,7 +45,7 @@ def train_agent(env, state_dim, action_dim, max_action, device, output_dir, args
     utils.print_banner('Loaded buffer')
 
     if args.algo == 'ql':
-        from agents.ql_diffusion import Diffusion_QL as Agent
+        from agents.mcep_ql_diffusion import MCEP_Diffusion_QL as Agent
         agent = Agent(state_dim=state_dim,
                       action_dim=action_dim,
                       max_action=max_action,
@@ -56,6 +56,7 @@ def train_agent(env, state_dim, action_dim, max_action, device, output_dir, args
                       beta_schedule=args.beta_schedule,
                       n_timesteps=args.T,
                       eta=args.eta,
+                      target_eta=args.target_eta
                       lr=args.lr,
                       lr_decay=args.lr_decay,
                       lr_maxt=args.num_epochs,
@@ -210,7 +211,8 @@ if __name__ == "__main__":
     # parser.add_argument("--top_k", default=1, type=int)
 
     parser.add_argument("--eval_freq", default=5, type=int)# eta
-    parser.add_argument("--eta", default=1.0, type=float)
+    parser.add_argument("--eta", default=2.0, type=float)
+    parser.add_argument("--target_eta", default=1.0, type=float)
     # parser.add_argument("--lr", default=3e-4, type=float)
     # parser.add_argument("--eta", default=1.0, type=float)
     # parser.add_argument("--max_q_backup", action='store_true')
