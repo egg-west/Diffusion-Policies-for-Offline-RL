@@ -9,6 +9,7 @@ import torch
 import json
 
 import d4rl
+import wandb
 from utils import utils
 from utils.data_sampler import Data_Sampler
 from utils.logger import logger, setup_logger
@@ -105,6 +106,12 @@ def train_agent(env, state_dim, action_dim, max_action, device, output_dir, args
                             np.mean(loss_metric['bc_loss']), np.mean(loss_metric['ql_loss']),
                             np.mean(loss_metric['actor_loss']), np.mean(loss_metric['critic_loss']),
                             curr_epoch])
+        results_dict = {"eval/reward":eval_res,
+                        "train/bc_loss":np.mean(loss_metric['bc_loss']),
+                        "ql_loss":np.mean(loss_metric['ql_loss']),
+                        "actor_loss":np.mean(loss_metric['actor_loss']),
+                        "critic_loss":np.mean(loss_metric['critic_loss'])}
+        wandb.log(results_dict, step=training_iters)
         np.save(os.path.join(output_dir, "eval"), evaluations)
         logger.record_tabular('Average Episodic Reward', eval_res)
         logger.record_tabular('Average Episodic N-Reward', eval_norm_res)
@@ -222,6 +229,11 @@ if __name__ == "__main__":
     args.gn = hyperparameters[args.env_name]['gn']
     args.top_k = hyperparameters[args.env_name]['top_k']
 
+    wandb.init(project=f"diffusion",
+               group=f"baseline-{args.env_name}",
+               name=str(args.seed))
+    wandb.config.update(args)
+
     # Setup Logging
     file_name = f"{args.env_name}|{args.exp}|diffusion-{args.algo}|T-{args.T}"
     if args.lr_decay: file_name += '|lr_decay'
@@ -246,7 +258,7 @@ if __name__ == "__main__":
     np.random.seed(args.seed)
 
     state_dim = env.observation_space.shape[0]
-    action_dim = env.action_space.shape[0] 
+    action_dim = env.action_space.shape[0]
     max_action = float(env.action_space.high[0])
 
     variant.update(state_dim=state_dim)

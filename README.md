@@ -1,5 +1,9 @@
 ## Diffusion Policies for Offline RL &mdash; Official PyTorch Implementation
 
+```
+pip install python-dateutil
+```
+
 **Diffusion Policies as an Expressive Policy Class for Offline Reinforcement Learning**<br>
 Zhendong Wang, Jonathan J Hunt and Mingyuan Zhou <br>
 https://arxiv.org/abs/2208.06193 <br>
