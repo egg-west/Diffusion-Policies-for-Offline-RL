@@ -46,7 +46,7 @@ class Critic(nn.Module):
         return torch.min(q1, q2)
 
 
-class Diffusion_QL_MCEP(object):
+class MCEP_Diffusion_QL(object):
     def __init__(self,
                  state_dim,
                  action_dim,
