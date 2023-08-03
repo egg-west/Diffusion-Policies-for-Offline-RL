@@ -106,7 +106,7 @@ def train_agent(env, state_dim, action_dim, max_action, device, output_dir, args
                             np.mean(loss_metric['bc_loss']), np.mean(loss_metric['ql_loss']),
                             np.mean(loss_metric['actor_loss']), np.mean(loss_metric['critic_loss']),
                             curr_epoch])
-        results_dict = {"eval/episodic_reward":eval_res,
+        results_dict = {"eval/episodic_reward":eval_norm_res,
                         "train/bc_loss":np.mean(loss_metric['bc_loss']),
                         "train/ql_loss":np.mean(loss_metric['ql_loss']),
                         "train/actor_loss":np.mean(loss_metric['actor_loss']),
