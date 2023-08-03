@@ -235,7 +235,7 @@ if __name__ == "__main__":
     args.top_k = hyperparameters[args.env_name]['top_k']
 
     wandb.init(project=f"diffusion",
-               group=f"d-{args.env_name}-{args.eta}",
+               group=f"mcep-{args.env_name}-targetEta{args.target_eta}-eta{args.eta}",
                name=str(args.seed))
     wandb.config.update(args)
 
