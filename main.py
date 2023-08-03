@@ -209,6 +209,8 @@ if __name__ == "__main__":
     parser.add_argument("--ms", default='offline', type=str, help="['online', 'offline']")
     # parser.add_argument("--top_k", default=1, type=int)
 
+    parser.add_argument("--eval_freq", default=5, type=int)
+
     # parser.add_argument("--lr", default=3e-4, type=float)
     # parser.add_argument("--eta", default=1.0, type=float)
     # parser.add_argument("--max_q_backup", action='store_true')
@@ -220,7 +222,7 @@ if __name__ == "__main__":
     args.output_dir = f'{args.dir}'
 
     args.num_epochs = hyperparameters[args.env_name]['num_epochs']
-    args.eval_freq = hyperparameters[args.env_name]['eval_freq']
+    args.eval_freq = args.eval_freq #hyperparameters[args.env_name]['eval_freq']
     args.eval_episodes = 10 if 'v2' in args.env_name else 100
 
     args.lr = hyperparameters[args.env_name]['lr']
