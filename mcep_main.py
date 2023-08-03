@@ -56,7 +56,7 @@ def train_agent(env, state_dim, action_dim, max_action, device, output_dir, args
                       beta_schedule=args.beta_schedule,
                       n_timesteps=args.T,
                       eta=args.eta,
-                      target_eta=args.target_eta
+                      target_eta=args.target_eta,
                       lr=args.lr,
                       lr_decay=args.lr_decay,
                       lr_maxt=args.num_epochs,
