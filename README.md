@@ -1,7 +1,8 @@
 ## Diffusion Policies for Offline RL &mdash; Official PyTorch Implementation
 
 ```
-pip install python-dateutil
+pip install python-dateutil chardet "cython<3"
+
 ```
 
 **Diffusion Policies as an Expressive Policy Class for Offline Reinforcement Learning**<br>
