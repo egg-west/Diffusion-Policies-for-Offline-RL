@@ -1,7 +1,36 @@
 ## Diffusion Policies for Offline RL &mdash; Official PyTorch Implementation
 
 ```
-pip install python-dateutil chardet "cython<3"
+sudo apt install libx11-dev libglew-dev patchelf libosmesa6-dev tmux
+
+wget https://repo.anaconda.com/archive/Anaconda3-2023.03-1-Linux-x86_64.sh
+chmod +x ./Anaconda3-2023.03-1-Linux-x86_64.sh
+./Anaconda3-2023.03-1-Linux-x86_64.sh
+#execute
+conda create -n pt python=3.8
+
+# put to the bashrc
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib/nvidia
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/v-linjiexu/.mujoco/mujoco210/bin
+conda activate pt
+
+source ~/.bashrc
+
+pip install python-dateutil chardet "cython<3" wandb tensorboard
+
+mkdir .mujoco
+cd .mujoco
+wget https://github.com/deepmind/mujoco/releases/download/2.1.0/mujoco210-linux-x86_64.tar.gz
+tar xvf mujoco210-linux-x86_64.tar.gz
+cd ..
+
+#install d4rl by clone
+git clone https://github.com/Farama-Foundation/D4RL
+cd D4RL
+pip install -e .
+cd ..
+
+conda install pytorch torchvision torchaudio pytorch-cuda=11.7 -c pytorch -c nvidia
 
 ```
 
@@ -14,7 +43,7 @@ is an important paradigm of RL. Standard RL methods often perform poorly at this
 out-of-distribution actions. While a variety of regularization methods have been proposed to mitigate this issue, they are often
 constrained by policy classes with limited expressiveness that can lead to highly suboptimal solutions. In this paper, we propose
 representing the policy as a diffusion model, a recent class of highly-expressive deep generative models. We introduce Diffusion
-Q-learning (Diffusion-QL) that utilizes a conditional diffusion model for behavior cloning and policy regularization. 
+Q-learning (Diffusion-QL) that utilizes a conditional diffusion model for behavior cloning and policy regularization.
 In our approach, we learn an action-value function and we add a term maximizing action-values into the training loss of the conditional diffusion model,
 which results in a loss that seeks optimal actions that are near the behavior policy. We show the expressiveness of the diffusion model-based policy,
 and the coupling of the behavior cloning and policy improvement under the diffusion model both contribute to the outstanding performance of Diffusion-QL.
