@@ -112,11 +112,14 @@ def train_agent(env, state_dim, action_dim, max_action, device, output_dir, args
         # Evaluation
         eval_res, eval_res_std, eval_norm_res, eval_norm_res_std = eval_policy(agent, args.env_name, args.seed,
                                                                                eval_episodes=args.eval_episodes)
+        _, _, eval_target_norm_res, _ = eval_target_policy(agent, args.env_name, args.seed,
+                                                                               eval_episodes=args.eval_episodes)
         evaluations.append([eval_res, eval_res_std, eval_norm_res, eval_norm_res_std,
                             np.mean(loss_metric['bc_loss']), np.mean(loss_metric['ql_loss']),
                             np.mean(loss_metric['actor_loss']), np.mean(loss_metric['critic_loss']),
                             curr_epoch])
         results_dict = {"eval/episodic_reward":eval_norm_res,
+                        "eval/episodic_reward_target":eval_target_norm_res,
                         "train/bc_loss":np.mean(loss_metric['bc_loss']),
                         "train/ql_loss":np.mean(loss_metric['ql_loss']),
                         "train/actor_loss":np.mean(loss_metric['actor_loss']),
@@ -176,6 +179,30 @@ def eval_policy(policy, env_name, seed, eval_episodes=10):
         state, done = eval_env.reset(), False
         while not done:
             action = policy.sample_action(np.array(state))
+            state, reward, done, _ = eval_env.step(action)
+            traj_return += reward
+        scores.append(traj_return)
+
+    avg_reward = np.mean(scores)
+    std_reward = np.std(scores)
+
+    normalized_scores = [eval_env.get_normalized_score(s) * 100.0 for s in scores]
+    avg_norm_score = eval_env.get_normalized_score(avg_reward) * 100.0
+    std_norm_score = np.std(normalized_scores)
+
+    utils.print_banner(f"Evaluation over {eval_episodes} episodes: {avg_reward:.2f} {avg_norm_score:.2f}, normalized return: {avg_norm_score:.2f}")
+    return avg_reward, std_reward, avg_norm_score, std_norm_score
+
+def eval_target_policy(policy, env_name, seed, eval_episodes=10):
+    eval_env = gym.make(env_name)
+    eval_env.seed(seed + 100)
+
+    scores = []
+    for _ in range(eval_episodes):
+        traj_return = 0.
+        state, done = eval_env.reset(), False
+        while not done:
+            action = policy.sample_action_from_target_policy(np.array(state))
             state, reward, done, _ = eval_env.step(action)
             traj_return += reward
         scores.append(traj_return)

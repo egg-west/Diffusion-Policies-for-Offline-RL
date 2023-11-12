@@ -219,6 +219,16 @@ class MCEP_Diffusion_QL(object):
             q_value = self.critic_target.q_min(state_rpt, action).flatten()
             idx = torch.multinomial(F.softmax(q_value), 1)
         return action[idx].cpu().data.numpy().flatten()
+    
+    def sample_action_from_target_policy(self, state):
+        """for evaluation"""
+        state = torch.FloatTensor(state.reshape(1, -1)).to(self.device)
+        state_rpt = torch.repeat_interleave(state, repeats=50, dim=0)
+        with torch.no_grad():
+            action = self.target_actor.sample(state_rpt)
+            q_value = self.critic_target.q_min(state_rpt, action).flatten()
+            idx = torch.multinomial(F.softmax(q_value), 1)
+        return action[idx].cpu().data.numpy().flatten()
 
     def save_model(self, dir, id=None):
         if id is not None:
