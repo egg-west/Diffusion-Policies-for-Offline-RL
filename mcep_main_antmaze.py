@@ -265,7 +265,7 @@ if __name__ == "__main__":
 
     args.lr = hyperparameters[args.env_name]['lr']
     args.target_eta = hyperparameters[args.env_name]['target_eta']
-    args.eta = hyperparameters[args.env_name]['target_eta'] + 0.5
+    args.eta = hyperparameters[args.env_name]['target_eta'] + 0.2
     args.max_q_backup = hyperparameters[args.env_name]['max_q_backup']
     args.reward_tune = hyperparameters[args.env_name]['reward_tune']
     args.gn = hyperparameters[args.env_name]['gn']
